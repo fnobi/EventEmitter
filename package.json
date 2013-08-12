@@ -1,0 +1,24 @@
+{
+  "name": "EventEmitter",
+  "version": "0.0.0",
+  "description": "node.js style EventEmitter for client side.",
+  "main": "EventEmitter.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fnobi/EventEmitter.git"
+  },
+  "author": "Fujisawa Shin",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-release": "~0.5.1",
+    "grunt-mocha-html": "0.0.1",
+    "grunt-koko": "~0.1.1",
+    "mocha": "~1.9.0",
+    "chai": "~1.7.2"
+  }
+}
