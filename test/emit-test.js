@@ -21,4 +21,16 @@ describe('EventEmitter', function () {
 
         hoge.emit('tick', 3, 5);
     });
+
+    it('catch event once', function () {
+        var human = new EventEmitter(),
+            age = 0;
+        human.once('aging', function (arg1, arg2) {
+            age++;
+        });
+
+        human.emit('aging');
+        human.emit('aging');
+        expect(age).to.be.equal(1);
+    });
 });

@@ -38,18 +38,8 @@ EventEmitter.prototype.addListener = function (type, fn) {
 EventEmitter.prototype.on = EventEmitter.prototype.addListener;
 
 EventEmitter.prototype.once = function (type, fn) {
-    if (!this._listeners) {
-        this.initEventEmitter();
-    }
-    if (!this._listeners[type]) {
-        this.initEventEmitterType(type);
-    }
-
-    var self = this;
-    this._listeners[type].push(function () {
-        fn.apply(self, arguments);
-        self.removeListener(type, fn);
-    });
+    fn._onceListener = true;
+    this.addListener(type, fn);
 };
 
 EventEmitter.prototype.removeListener = function (type, fn) {
@@ -77,7 +67,7 @@ EventEmitter.prototype.removeListener = function (type, fn) {
     var self = this;
     this._listeners[type].forEach(function (listener, index) {
         if (listener === fn) {
-            self._listeners[type] = self._listeners[type].splice(index, 1);
+            self._listeners[type].splice(index, 1);
         }
     });
     this.emit('removeListener', type, fn);
@@ -99,6 +89,9 @@ EventEmitter.prototype.emit = function (type) {
 
     this._listeners[type].forEach(function (listener) {
         listener.apply(self, args);
+        if (listener._onceListener) {
+            self.removeListener(type, listener);
+        }
     });
 };
 
