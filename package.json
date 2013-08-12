@@ -1,6 +1,5 @@
 {
   "name": "EventEmitter",
-  "version": "0.0.0",
   "description": "node.js style EventEmitter for client side.",
   "main": "EventEmitter.js",
   "scripts": {
