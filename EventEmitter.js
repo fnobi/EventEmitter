@@ -31,6 +31,8 @@ EventEmitter.prototype.addListener = function (type, fn) {
         this.initEventEmitterType(type);
     }
     this._listeners[type].push(fn);
+
+    this.emit('newListener', type, fn);
 };
 
 EventEmitter.prototype.on = EventEmitter.prototype.addListener;
@@ -63,12 +65,22 @@ EventEmitter.prototype.removeListener = function (type, fn) {
 
     if (!type) {
         this.initEventEmitter();
+        this.emit('removeListener', type, fn);
         return;
     }
     if (!fn) {
         this.initEventEmitterType(type);
+        this.emit('removeListener', type, fn);
         return;
     }
+
+    var self = this;
+    this._listeners[type].forEach(function (listener, index) {
+        if (listener === fn) {
+            self._listeners[type] = self._listeners[type].splice(index, 1);
+        }
+    });
+    this.emit('removeListener', type, fn);
 };
 
 EventEmitter.prototype.emit = function (type) {
