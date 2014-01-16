@@ -49,7 +49,7 @@ EventEmitter.prototype.removeListener = function (type, fn) {
     if (!this._listeners[type]) {
         return;
     }
-    if (!this._listeners[type].forEach) {
+    if (isNaN(this._listeners[type].length)) {
         return;
     }
 
@@ -65,11 +65,13 @@ EventEmitter.prototype.removeListener = function (type, fn) {
     }
 
     var self = this;
-    this._listeners[type].forEach(function (listener, index) {
-        if (listener === fn) {
-            self._listeners[type].splice(index, 1);
-        }
-    });
+    for (var i = 0; i < this._listeners[type].length; i++) {
+        (function (listener, index) {
+            if (listener === fn) {
+                self._listeners[type].splice(index, 1);
+            }
+        })(this._listeners[type][i], i);
+    }
     this.emit('removeListener', type, fn);
 };
 
@@ -80,19 +82,21 @@ EventEmitter.prototype.emit = function (type) {
     if (!this._listeners[type]) {
         return;
     }
-    if (!this._listeners[type].forEach) {
+    if (isNaN(this._listeners[type].length)) {
         return;
     }
 
     var self = this,
         args = [].slice.call(arguments, 1);
 
-    this._listeners[type].forEach(function (listener) {
-        listener.apply(self, args);
-        if (listener._onceListener) {
-            self.removeListener(type, listener);
-        }
-    });
+    for (var i = 0; i < this._listeners[type].length; i++) {
+        (function (listener) {
+            listener.apply(self, args);
+            if (listener._onceListener) {
+                self.removeListener(type, listener);
+            }
+        })(this._listeners[type][i]);
+    }
 };
 
 EventEmitter.prototype.listeners = function (type) {
