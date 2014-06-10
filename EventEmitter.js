@@ -37,8 +37,8 @@ EventEmitter.prototype.addListener = function (type, fn) {
 
 EventEmitter.prototype.on = EventEmitter.prototype.addListener;
 
-EventEmitter.prototype.once = function (type, fn) {
-    fn._onceListener = true;
+EventEmitter.prototype.one = function (type, fn) {
+    fn._oneTimeListener = true;
     this.addListener(type, fn);
 };
 
@@ -92,7 +92,7 @@ EventEmitter.prototype.emit = function (type) {
     for (var i = 0; i < this._listeners[type].length; i++) {
         (function (listener) {
             listener.apply(self, args);
-            if (listener._onceListener) {
+            if (listener._oneTimeListener) {
                 self.removeListener(type, listener);
             }
         })(this._listeners[type][i]);
