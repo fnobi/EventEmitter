@@ -5,11 +5,6 @@ node.js style EventEmitter for client side.
 
 ## install
 
-### from bower
-```
-bower install EventEmitter
-```
-
 ### from github
 ```
 git clone https://github.com/fnobi/EventEmitter.git
